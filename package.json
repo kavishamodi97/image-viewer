@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.4",
+    "browserslist": "^4.16.6",
+    "caniuse-lite": "^1.0.30001237",
     "react": "^16.5.2",
     "react-dom": "^16.5.2",
     "react-scripts": "2.0.4"
