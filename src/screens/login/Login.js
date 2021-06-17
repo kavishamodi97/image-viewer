@@ -81,7 +81,7 @@ class Login extends Component {
               <br />
               <FormControl required>
                 <InputLabel htmlFor="username">Username</InputLabel>
-                <Input
+                <Input className="input-field"
                   id="username"
                   type="text"
                   username={this.state.username}
@@ -95,7 +95,7 @@ class Login extends Component {
               <br />
               <FormControl required>
                 <InputLabel htmlFor="password">Password</InputLabel>
-                <Input
+                <Input className="input-field"
                   id="password"
                   type="password"
                   loginPassword={this.state.loginPassword}

@@ -15,6 +15,10 @@
   text-align: left;
 }
 
+.input-field{
+  width: 350px;
+}
+
 .dispNone{
     display: none;
  }
