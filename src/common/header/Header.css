@@ -2,11 +2,27 @@
 
 .app-header {
 	background-color: #263238;
-	width: 100%;
-	padding: 8px 32px 8px 16px;
+    height: 70px;
 }
 
 .header-title {
-	color: #fff;
-	font-size: 18px;
+	color:#fff;
+    float: left;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.header-right{
+	float:right;
+    margin-right: 50px;
+    padding: 20px;
+}
+
+.search-field{
+    border-radius: 4px;
+    width: 300px;
+    background-color: #c0c0c0;
+    height: 40px;
+    padding:6px;
+    text-align: center;
 }
