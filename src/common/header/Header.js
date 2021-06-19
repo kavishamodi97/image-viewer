@@ -26,32 +26,55 @@ const Header = (props) => {
           {props.showHomePage === "home" && (
             <div className="header-right">
               <Input
-                id="search"
+                id="search-box"
                 type="search"
                 className="search-field"
                 variant="outlined"
                 placeholder="Search…"
                 startAdornment={
-                  <InputAdornment position="start">
+                  <InputAdornment
+                    variant="standard"
+                    position="start"
+                    id="searchBoxIcon"
+                    style={{ backgroundColor: "#c0c0c0" }}
+                  >
                     <SearchOutlinedIcon />
                   </InputAdornment>
                 }
+                disableUnderline={true}
               />
               <Avatar
                 alt="Remy Sharp"
-                src=""
+                src="/static/images/avatar/1.jpg"
                 className="icon-large"
                 onClick={handleClick}
               />
               <Menu
-                id="simple-menu"
+                id="fade-menu"
                 anchorEl={anchorEl}
                 keepMounted
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
               >
-                <MenuItem onClick={handleClose}>My account</MenuItem>
-                <MenuItem onClick={handleClose}>Logout</MenuItem>
+                <MenuItem
+                  style={{
+                    fontSize: "medium",
+                    fontWeight: "bold",
+                  }}
+                  onClick={handleClose}
+                >
+                  My account
+                </MenuItem>
+                <hr className="menu-line" />
+                <MenuItem
+                  style={{
+                    fontSize: "medium",
+                    fontWeight: "bold",
+                  }}
+                  onClick={handleClose}
+                >
+                  Logout
+                </MenuItem>
               </Menu>
             </div>
           )}
