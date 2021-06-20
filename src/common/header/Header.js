@@ -18,6 +18,15 @@ const Header = (props) => {
     setAnchorEl(null);
   };
 
+  const profileClickHandler = () => {
+    props.history.push("/profile");
+  };
+
+  const logoutClickHandler = () => {
+    sessionStorage.removeItem("access-token");
+    props.history.push("/");
+  };
+
   return (
     <div>
       <header>
@@ -61,7 +70,9 @@ const Header = (props) => {
                     fontSize: "medium",
                     fontWeight: "bold",
                   }}
-                  onClick={handleClose}
+                  onClick={() => {
+                    profileClickHandler();
+                  }}
                 >
                   My account
                 </MenuItem>
@@ -71,7 +82,9 @@ const Header = (props) => {
                     fontSize: "medium",
                     fontWeight: "bold",
                   }}
-                  onClick={handleClose}
+                  onClick={() => {
+                    logoutClickHandler();
+                  }}
                 >
                   Logout
                 </MenuItem>

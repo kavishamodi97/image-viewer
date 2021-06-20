@@ -81,7 +81,11 @@ class Home extends Component {
     const { classes } = this.props;
     return (
       <div>
-        <Header title="Image Viewer" showHomePage="home"></Header>
+        <Header
+          history={this.props.history}
+          title="Image Viewer"
+          showHomePage="home"
+        ></Header>
         <div className="grid-container">
           <GridList cols={2} cellHeight={1000} className={classes.gridListMain}>
             <GridListTile key="post1" style={gridListTileStyle}>
