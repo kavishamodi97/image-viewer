@@ -12,6 +12,10 @@ import Typography from "@material-ui/core/Typography";
 import instaLogo from "../../assets/insta.png";
 import Divider from "@material-ui/core/Divider";
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FormControl from "@material-ui/core/FormControl";
+import Input from "@material-ui/core/Input";
+import Button from "@material-ui/core/Button";
+import InputLabel from "@material-ui/core/InputLabel";
 
 const styles = (theme) => ({
   root: {
@@ -21,6 +25,11 @@ const styles = (theme) => ({
   gridListMain: {
     transform: "translateZ(0)",
     width: "1500px",
+  },
+  formControl: {
+    margin: theme.spacing(),
+    minWidth: 240,
+    maxWidth: 240,
   },
   title: {
     color: theme.palette.primary.light,
@@ -54,6 +63,19 @@ const cardStyle = {
   height: "100%",
 };
 
+const commentStyle = {
+  formControlStyle: {
+    width: "90%",
+    marginRight: "10px",
+    height: "40px",
+    marginTop: "60px",
+  },
+  commentButtonStyle: {
+    height: "50px",
+    marginTop: "60px",
+  },
+};
+
 class Home extends Component {
   render() {
     const { classes } = this.props;
@@ -61,7 +83,7 @@ class Home extends Component {
       <div>
         <Header title="Image Viewer" showHomePage="home"></Header>
         <div className="grid-container">
-          <GridList cols={2} cellHeight={900} className={classes.gridListMain}>
+          <GridList cols={2} cellHeight={1000} className={classes.gridListMain}>
             <GridListTile key="post1" style={gridListTileStyle}>
               <Card style={{ cardStyle }} variant="outlined">
                 <CardHeader
@@ -89,6 +111,25 @@ class Home extends Component {
                   <div className="like-section">
                     <FavoriteBorderIcon style={postStyle.likeIconStyle} />
                     <span className="like-post"> 2 likes</span>
+                  </div>
+                  <div className="comment-section">
+                    <FormControl style={commentStyle.formControlStyle}>
+                      <InputLabel htmlFor="addComment">
+                        Add a comment
+                      </InputLabel>
+                      <Input
+                        id="addComment"
+                        type="text"
+                        placeholder="Add a comment"
+                      />
+                    </FormControl>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      style={commentStyle.commentButtonStyle}
+                    >
+                      ADD
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
