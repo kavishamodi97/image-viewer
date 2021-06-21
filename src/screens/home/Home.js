@@ -77,6 +77,61 @@ const commentStyle = {
 };
 
 class Home extends Component {
+  constructor() {
+    super();
+    this.state = {
+      comments: "",
+      postList: [],
+      idCaptionDetails: [], //1st endpoint info
+      postDetails: [], //2nd endpoint info
+    };
+  }
+
+  componentDidMount() {
+    //Get Image Id and Caption Details
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    let that = this;
+
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        that.setState({
+          idCaptionDetails: JSON.parse(this.responseText).data,
+        });
+        console.log(this.responseText);
+      }
+    });
+    if (sessionStorage.getItem("access-token") !== null) {
+      xhr.open(
+        "GET",
+        "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
+          sessionStorage.getItem("access-token")
+      );
+      xhr.send(data);
+    }
+
+    // Get User Post Details
+    let userPostData = null;
+    let userPost = new XMLHttpRequest();
+
+    userPost.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        that.setState({
+          postDetails: JSON.parse(this.responseText).data,
+        });
+        console.log(this.responseText);
+      }
+    });
+    if (sessionStorage.getItem("access-token") !== null) {
+      xhr.open(
+        "GET",
+        "https://graph.instagram.com/17910899032778771?fields=id,media_type,media_url,username,timestamp&access_token=" +
+          sessionStorage.getItem("access-token")
+      );
+      xhr.send(userPostData);
+    }
+  }
+
   render() {
     const { classes } = this.props;
     return (
