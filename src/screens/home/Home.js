@@ -80,8 +80,6 @@ class Home extends Component {
   constructor() {
     super();
     this.state = {
-      comments: "",
-      postList: [],
       idCaptionDetails: [], //1st endpoint info
       postDetails: [], //2nd endpoint info
     };
@@ -92,13 +90,21 @@ class Home extends Component {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
+    let fetchIdList = [];
+    let idResponseList = [];
+    let postResponseList = [];
 
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
+        idResponseList = JSON.parse(this.responseText).data;
+        for (var i = 0; i < idResponseList.length; i++) {
+          fetchIdList.push(idResponseList[i].id);
+        }
         that.setState({
-          idCaptionDetails: JSON.parse(this.responseText).data,
+          idCaptionDetails: fetchIdList,
         });
         console.log(this.responseText);
+        console.log(fetchIdList);
       }
     });
     if (sessionStorage.getItem("access-token") !== null) {
@@ -110,25 +116,30 @@ class Home extends Component {
       xhr.send(data);
     }
 
-    // Get User Post Details
+    //Get Post Details
     let userPostData = null;
     let userPost = new XMLHttpRequest();
 
     userPost.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
+        postResponseList = JSON.parse(this.responseText).data;
         that.setState({
-          postDetails: JSON.parse(this.responseText).data,
+          postDetails: postResponseList,
         });
         console.log(this.responseText);
       }
     });
     if (sessionStorage.getItem("access-token") !== null) {
-      xhr.open(
-        "GET",
-        "https://graph.instagram.com/17910899032778771?fields=id,media_type,media_url,username,timestamp&access_token=" +
-          sessionStorage.getItem("access-token")
-      );
-      xhr.send(userPostData);
+      console.log(fetchIdList);
+      this.state.idCaptionDetails.push(fetchIdList);
+      console.log(this.state.idCaptionDetails);
+      const instraPostUrl =
+        `https://graph.instagram.com/17906851474899248` +
+        `?fields=id,media_type,media_url,username,timestamp&access_token=` +
+        sessionStorage.getItem("access-token");
+
+      userPost.open("GET", instraPostUrl);
+      userPost.send(userPostData);
     }
   }
 
