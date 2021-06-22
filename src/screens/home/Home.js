@@ -46,6 +46,7 @@ const postStyle = {
   captionStyle: {
     fontSize: "20px",
     paddingTop: "10px",
+    fontWeight: "bold",
     color: "black",
   },
   likeIconStyle: {
@@ -81,7 +82,7 @@ class Home extends Component {
     super();
     this.state = {
       postDescription: [], //1st endpoint info
-      postDetails: [],  //2nd endpoint info
+      postDetails: [], //2nd endpoint info
     };
   }
 
@@ -92,7 +93,7 @@ class Home extends Component {
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
         that.setState({ postDescription: JSON.parse(this.responseText).data });
-        // now get the post details for each post description
+        // get the post details for each post description
         that.getPostDetails();
       }
     });
@@ -101,21 +102,23 @@ class Home extends Component {
       "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
         window.sessionStorage.getItem("access-token")
     );
-    xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.send(data);
   }
 
+  //get post details
   getPostDetails = () => {
     this.state.postDescription.map((post) => {
-      return this.getPostDetailsById(post.id);
+      return this.getPostDetailsById(post.id, post.caption);
     });
   };
 
-  getPostDetailsById = (id) => {
+  //get unique post Id
+  getPostDetailsById = (id, caption) => {
     let that = this;
     let xhr = new XMLHttpRequest();
     let data = null;
     console.log("post id here :" + id);
+    console.log("post caption here:" + caption);
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
         that.setState({
@@ -130,9 +133,8 @@ class Home extends Component {
       "https://graph.instagram.com/" +
         id +
         "?fields=id,media_type,media_url,username,timestamp&access_token=" +
-        window.sessionStorage.getItem("access-token")
+        sessionStorage.getItem("access-token")
     );
-    xhr.setRequestHeader("Cache-Control", "no-cache");
     xhr.send(data);
   };
 
@@ -147,56 +149,68 @@ class Home extends Component {
         ></Header>
         <div className="grid-container">
           <GridList cols={2} cellHeight={1000} className={classes.gridListMain}>
-            <GridListTile key="post1" style={gridListTileStyle}>
-              <Card style={{ cardStyle }} variant="outlined">
-                <CardHeader
-                  avatar={<Avatar aria-label="recipe" src={instaLogo}></Avatar>}
-                  title="modi_kavisha18"
-                  subheader="12/12/23 22:33:44"
-                ></CardHeader>
-                <CardContent>
-                  <img src={instaLogo} alt="imag1" className="post-image" />
-                  <br />
-                  <br />
-                  <Divider style={{ backgroundColor: "#c0c0c0" }} />
-                  <Typography variant="h5" style={postStyle.captionStyle}>
-                    Team of Great People at Upgrad
-                  </Typography>
-                  <div>
-                    <Typography
-                      display="inline"
-                      variant="caption"
-                      style={postStyle.hashtagStyle}
-                    >
-                      #upgrad #skills #onlineplatform
+            {this.state.postDetails.map((post) => (
+              <GridListTile key={"post" + post.id} style={gridListTileStyle}>
+                <Card
+                  style={{ cardStyle }}
+                  variant="outlined"
+                  key={"post" + post.id}
+                >
+                  <CardHeader
+                    avatar={
+                      <Avatar aria-label="recipe" src={instaLogo}></Avatar>
+                    }
+                    title={post.username}
+                    subheader={post.timestamp}
+                  ></CardHeader>
+                  <CardContent>
+                    <img
+                      src={post.media_url}
+                      alt={post.username}
+                      className="post-image"
+                    />
+                    <br />
+                    <br />
+                    <Divider style={{ backgroundColor: "#c0c0c0" }} />
+                    <Typography variant="h5" style={postStyle.captionStyle}>
+                      caption here!!
                     </Typography>
-                  </div>
-                  <div className="like-section">
-                    <FavoriteBorderIcon style={postStyle.likeIconStyle} />
-                    <span className="like-post"> 2 likes</span>
-                  </div>
-                  <div className="comment-section">
-                    <FormControl style={commentStyle.formControlStyle}>
-                      <InputLabel htmlFor="addComment">
-                        Add a comment
-                      </InputLabel>
-                      <Input
-                        id="addComment"
-                        type="text"
-                        placeholder="Add a comment"
-                      />
-                    </FormControl>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={commentStyle.commentButtonStyle}
-                    >
-                      ADD
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            </GridListTile>
+                    <div>
+                      <Typography
+                        display="inline"
+                        variant="caption"
+                        style={postStyle.hashtagStyle}
+                      >
+                        #upgrad #skills #onlineplatform
+                      </Typography>
+                    </div>
+                    <div className="like-section">
+                      <FavoriteBorderIcon style={postStyle.likeIconStyle} />
+                      <span className="like-post"> 2 likes</span>
+                    </div>
+                    <div className="comment-section">
+                      <FormControl style={commentStyle.formControlStyle}>
+                        <InputLabel htmlFor="addComment">
+                          Add a comment
+                        </InputLabel>
+                        <Input
+                          id="addComment"
+                          type="text"
+                          placeholder="Add a comment"
+                        />
+                      </FormControl>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        style={commentStyle.commentButtonStyle}
+                      >
+                        ADD
+                      </Button>
+                    </div>
+                  </CardContent>
+                </Card>
+              </GridListTile>
+            ))}
           </GridList>
         </div>
       </div>
