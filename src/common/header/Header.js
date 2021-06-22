@@ -1,5 +1,6 @@
 import React from "react";
 import "./Header.css";
+import instaLogo from "../../assets/insta.png";
 import Input from "@material-ui/core/Input";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import SearchOutlinedIcon from "@material-ui/icons/SearchOutlined";
@@ -40,6 +41,7 @@ const Header = (props) => {
                 className="search-field"
                 variant="outlined"
                 placeholder="Search…"
+                onChange={props.onSearchTextChanged}
                 startAdornment={
                   <InputAdornment
                     variant="standard"
@@ -54,7 +56,7 @@ const Header = (props) => {
               />
               <Avatar
                 alt="Remy Sharp"
-                src="/static/images/avatar/1.jpg"
+                src={instaLogo}
                 className="icon-large"
                 onClick={handleClick}
               />
