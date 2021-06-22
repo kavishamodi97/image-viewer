@@ -80,68 +80,61 @@ class Home extends Component {
   constructor() {
     super();
     this.state = {
-      idCaptionDetails: [], //1st endpoint info
-      postDetails: [], //2nd endpoint info
+      postDescription: [], //1st endpoint info
+      postDetails: [],  //2nd endpoint info
     };
   }
 
-  componentDidMount() {
-    //Get Image Id and Caption Details
+  componentWillMount() {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
-    let fetchIdList = [];
-    let idResponseList = [];
-    let postResponseList = [];
-
     xhr.addEventListener("readystatechange", function() {
       if (this.readyState === 4) {
-        idResponseList = JSON.parse(this.responseText).data;
-        for (var i = 0; i < idResponseList.length; i++) {
-          fetchIdList.push(idResponseList[i].id);
-        }
-        that.setState({
-          idCaptionDetails: fetchIdList,
-        });
-        console.log(this.responseText);
-        console.log(fetchIdList);
+        that.setState({ postDescription: JSON.parse(this.responseText).data });
+        // now get the post details for each post description
+        that.getPostDetails();
       }
     });
-    if (sessionStorage.getItem("access-token") !== null) {
-      xhr.open(
-        "GET",
-        "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
-          sessionStorage.getItem("access-token")
-      );
-      xhr.send(data);
-    }
-
-    //Get Post Details
-    let userPostData = null;
-    let userPost = new XMLHttpRequest();
-
-    userPost.addEventListener("readystatechange", function() {
-      if (this.readyState === 4) {
-        postResponseList = JSON.parse(this.responseText).data;
-        that.setState({
-          postDetails: postResponseList,
-        });
-        console.log(this.responseText);
-      }
-    });
-    if (sessionStorage.getItem("access-token") !== null) {
-      console.log(fetchIdList);
-      this.state.idCaptionDetails.push(fetchIdList);
-      console.log(this.state.idCaptionDetails);
-      const instraPostUrl =
-        `https://graph.instagram.com/17906851474899248` +
-        `?fields=id,media_type,media_url,username,timestamp&access_token=` +
-        sessionStorage.getItem("access-token");
-
-      userPost.open("GET", instraPostUrl);
-      userPost.send(userPostData);
-    }
+    xhr.open(
+      "GET",
+      "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
+        window.sessionStorage.getItem("access-token")
+    );
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.send(data);
   }
+
+  getPostDetails = () => {
+    this.state.postDescription.map((post) => {
+      return this.getPostDetailsById(post.id);
+    });
+  };
+
+  getPostDetailsById = (id) => {
+    let that = this;
+    let xhr = new XMLHttpRequest();
+    let data = null;
+    console.log("post id here :" + id);
+    xhr.addEventListener("readystatechange", function() {
+      if (this.readyState === 4) {
+        that.setState({
+          postDetails: that.state.postDetails.concat(
+            JSON.parse(this.responseText)
+          ),
+        });
+      }
+    });
+    xhr.open(
+      "GET",
+      "https://graph.instagram.com/" +
+        id +
+        "?fields=id,media_type,media_url,username,timestamp&access_token=" +
+        window.sessionStorage.getItem("access-token")
+    );
+    xhr.setRequestHeader("Cache-Control", "no-cache");
+    xhr.send(data);
+  };
 
   render() {
     const { classes } = this.props;
