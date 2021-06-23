@@ -10,6 +10,7 @@
   float: left;
   padding: 25px;
   font-size: 18px;
+  cursor: pointer;
 }
 
 .header-right {

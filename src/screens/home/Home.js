@@ -90,11 +90,11 @@ class Home extends Component {
     };
   }
 
-  UNSAFE_componentWillMount () {
+  UNSAFE_componentWillMount() {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
-    xhr.addEventListener("readystatechange", function() {
+    xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         that.setState({ postDescription: JSON.parse(this.responseText).data });
         // get the post details for each post description
@@ -104,7 +104,7 @@ class Home extends Component {
     xhr.open(
       "GET",
       "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
-        window.sessionStorage.getItem("access-token")
+      window.sessionStorage.getItem("access-token")
     );
     xhr.send(data);
   }
@@ -123,7 +123,7 @@ class Home extends Component {
     let data = null;
     console.log("post id here :" + id);
     console.log("post caption here:" + caption);
-    xhr.addEventListener("readystatechange", function() {
+    xhr.addEventListener("readystatechange", function () {
       if (this.readyState === 4) {
         that.setState({
           postDetails: that.state.postDetails.concat(
@@ -135,45 +135,43 @@ class Home extends Component {
     xhr.open(
       "GET",
       "https://graph.instagram.com/" +
-        id +
-        "?fields=id,media_type,media_url,username,timestamp&access_token=" +
-        sessionStorage.getItem("access-token")
+      id +
+      "?fields=id,media_type,media_url,username,timestamp&access_token=" +
+      sessionStorage.getItem("access-token")
     );
     xhr.send(data);
   };
 
-
-
   //search specific post by caption
   searchTextChangeHandler = (e) => {
     const { postDescription, searchField } = this.state;
-    const filteredPost = postDescription.filter((post) =>{
+    const filteredPost = postDescription.filter((post) => {
       return post.caption.toLowerCase().includes(searchField.toLowerCase())
     });
     this.setState({ postDetails: filteredPost });
-}
+  }
 
   // Convert post date into DD/MM/YYYY HH:MM:SS format
-  convertTimeStampIntoDateFormat=(newDate)=>{
-   let date=new Date(newDate);
-   let dd = date.getDate();
-   let mm = date.getMonth() + 1;
-   let yyyy = date.getFullYear();
-   let hh=date.getHours();
-   let MM=date.getMinutes();
-   let ss=date.getSeconds();
-   dd = dd < 10 ? "0" + dd : dd;
-   mm = mm < 10 ? "0" + mm : mm;
+  convertTimeStampIntoDateFormat = (newDate) => {
+    let date = new Date(newDate);
+    let dd = date.getDate();
+    let mm = date.getMonth() + 1;
+    let yyyy = date.getFullYear();
+    let hh = date.getHours();
+    let MM = date.getMinutes();
+    let ss = date.getSeconds();
+    dd = dd < 10 ? "0" + dd : dd;
+    mm = mm < 10 ? "0" + mm : mm;
     return (dd + "/" + mm + "/" + yyyy + " " + hh + ":" + MM + ":" + ss);
   }
 
   //Get Post Caption When Post Id Match
-  getEachCaptionsFromPost=(id)=>{
-  return this.state.postDescription.map((post) => {
+  getEachCaptionsFromPost = (id) => {
+    this.state.postDescription.map((post) => {
       if (post.id === id) {
         console.log("get each caption from post" + post.caption);
         return post.caption.split("\n")[0];
-    }
+      }
     });
   }
 
@@ -185,7 +183,7 @@ class Home extends Component {
           history={this.props.history}
           title="Image Viewer"
           showHomePage="home"
-          onSearchTextChanged ={(e)=> this.searchTextChangeHandler(e.target.value)}
+          onSearchTextChanged={(e) => this.searchTextChangeHandler(e.target.value)}
         ></Header>
         <div className="grid-container">
           <GridList cols={2} cellHeight={1100} className={classes.gridListMain}>
@@ -213,21 +211,21 @@ class Home extends Component {
                     <br />
                     <Divider style={{ backgroundColor: "#c0c0c0" }} />
                     <Typography variant="h5" style={postStyle.captionStyle}>
-                     {this.getEachCaptionsFromPost(post.id)}
+                      {this.getEachCaptionsFromPost(post.id)}
                     </Typography>
                     <div>
-                    <Typography
-                      display="inline"
-                      variant="caption"
-                      style={postStyle.hashtagStyle}
-                    >
-                      #upgrad #skills #onlineplatform
-                    </Typography>
-                  </div>
+                      <Typography
+                        display="inline"
+                        variant="caption"
+                        style={postStyle.hashtagStyle}
+                      >
+                        #upgrad #skills #onlineplatform
+                      </Typography>
+                    </div>
                     <div className="like-section">
-                    <FavoriteBorderIcon style={postStyle.likeIconStyle} />
-                    <span className="like-post"> 2 likes</span>
-                  </div>
+                      <FavoriteBorderIcon style={postStyle.likeIconStyle} />
+                      <span className="like-post"> 2 likes</span>
+                    </div>
                     <div className="comment-section">
                       <FormControl style={commentStyle.formControlStyle}>
                         <InputLabel htmlFor="addComment">

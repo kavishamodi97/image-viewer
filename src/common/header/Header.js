@@ -19,6 +19,10 @@ const Header = (props) => {
     setAnchorEl(null);
   };
 
+  const onClickLogoHandler = () => {
+    sessionStorage.getItem("access-token") !== null ? props.history.push("/home") : props.history.push("/");
+  }
+
   const profileClickHandler = () => {
     props.history.push("/profile");
   };
@@ -32,7 +36,7 @@ const Header = (props) => {
     <div>
       <header>
         <div className="app-header">
-          <span className="header-title">{props.title}</span>
+          <span className="header-title" onClick={() => { onClickLogoHandler() }}>{props.title}</span>
           {props.showHomePage === "home" && (
             <div className="header-right">
               <Input
@@ -71,6 +75,7 @@ const Header = (props) => {
                   style={{
                     fontSize: "medium",
                     fontWeight: "bold",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
                     profileClickHandler();
@@ -83,6 +88,7 @@ const Header = (props) => {
                   style={{
                     fontSize: "medium",
                     fontWeight: "bold",
+                    cursor: "pointer"
                   }}
                   onClick={() => {
                     logoutClickHandler();
@@ -93,6 +99,37 @@ const Header = (props) => {
               </Menu>
             </div>
           )}
+          {
+            props.showProfilePage === "profile" && (
+              <div className="header-right">
+                <Avatar
+                  alt="Remy Sharp"
+                  src={instaLogo}
+                  className="icon-large"
+                  onClick={handleClick}
+                />
+                <Menu
+                  id="fade-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+                >
+                  <MenuItem
+                    style={{
+                      fontSize: "medium",
+                      fontWeight: "bold",
+                      cursor: "pointer"
+                    }}
+                    onClick={() => {
+                      logoutClickHandler();
+                    }}
+                  >
+                    Logout
+                  </MenuItem>
+                </Menu>
+              </div>
+            )}
         </div>
       </header>
     </div>
