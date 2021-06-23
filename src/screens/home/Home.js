@@ -142,15 +142,7 @@ class Home extends Component {
     xhr.send(data);
   };
 
-  // //search specific post by caption
-  // searchTextChangeHandler = (e) => {
-  //   let searchValue = e.target.value;
-  //   console.log(searchValue);
-  //   let postFilterResult = this.state.postDescription.filter((post) => {
-  //     return post.caption.toUpperCase().indexOf(searchValue.toUpperCase()) !== -1;
-  //   });
-  //   this.setState({postDescription:postFilterResult});
-  // }
+
 
   //search specific post by caption
   searchTextChangeHandler = (e) => {
