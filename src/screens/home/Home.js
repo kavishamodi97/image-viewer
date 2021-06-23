@@ -83,6 +83,7 @@ class Home extends Component {
     this.state = {
       postDescription: [], //1st endpoint info
       postDetails: [], //2nd endpoint info
+      searchField: '',
       likeIcon: "dispBlock",
       likedIcon: "dispNone",
       likeCount: Math.floor(Math.random() * 50),
@@ -141,15 +142,24 @@ class Home extends Component {
     xhr.send(data);
   };
 
+  // //search specific post by caption
+  // searchTextChangeHandler = (e) => {
+  //   let searchValue = e.target.value;
+  //   console.log(searchValue);
+  //   let postFilterResult = this.state.postDescription.filter((post) => {
+  //     return post.caption.toUpperCase().indexOf(searchValue.toUpperCase()) !== -1;
+  //   });
+  //   this.setState({postDescription:postFilterResult});
+  // }
+
   //search specific post by caption
   searchTextChangeHandler = (e) => {
-    let searchValue = e.target.value;
-    console.log(searchValue);
-    let postFilterResult = this.state.postDescription.filter((post) => {
-      return post.caption.toUpperCase().indexOf(searchValue.toUpperCase()) !== -1;
+    const { postDescription, searchField } = this.state;
+    const filteredPost = postDescription.filter((post) =>{
+      return post.caption.toLowerCase().includes(searchField.toLowerCase())
     });
-    this.setState({postDescription:postFilterResult});
-  }
+    this.setState({ postDetails: filteredPost });
+}
 
   // Convert post date into DD/MM/YYYY HH:MM:SS format
   convertTimeStampIntoDateFormat=(newDate)=>{
@@ -165,37 +175,15 @@ class Home extends Component {
     return (dd + "/" + mm + "/" + yyyy + " " + hh + ":" + MM + ":" + ss);
   }
 
-  //function to add a like to a post
-//   likeIncClickHandler = (id) => {
-//     let postList = this.state.postDetails;
-//     postList.forEach(function(post){
-//         if(post.id === id){
-//            this.state.likeCount += 1;
-//             // this.state.likeIcon = "dispNone";
-//             // this.state.likedIcon = "dispBlock";
-//             this.setState({
-//                 likeIcon: "dispNone",
-//                 likedIcon: "dispBlock"
-//             });
-//         }
-//     });
-// }
-
-//function to unlike a post
-// likedesClickHandler = (id) => {
-//   let postList = this.state.postDetails;
-//   postList.forEach(function(post){
-//       if(post.id === id){
-//         this.state.likeCount -= 1;
-//         // this.state.likeIcon = "dispBlock";
-//         // this.state.likedIcon = "dispNone";
-//           this.setState({
-//               likeIcon: "dispBlock", 
-//               likedIcon: "dispNone"
-//           });
-//       }
-//   });
-// }
+  //Get Post Caption When Post Id Match
+  getEachCaptionsFromPost=(id)=>{
+  return this.state.postDescription.map((post) => {
+      if (post.id === id) {
+        console.log("get each caption from post" + post.caption);
+        return post.caption.split("\n")[0];
+    }
+    });
+  }
 
   render() {
     const { classes } = this.props;
@@ -205,10 +193,10 @@ class Home extends Component {
           history={this.props.history}
           title="Image Viewer"
           showHomePage="home"
-          onSearchTextChanged={this.searchTextChangeHandler}
+          onSearchTextChanged ={(e)=> this.searchTextChangeHandler(e.target.value)}
         ></Header>
         <div className="grid-container">
-          <GridList cols={2} cellHeight={1000} className={classes.gridListMain}>
+          <GridList cols={2} cellHeight={1100} className={classes.gridListMain}>
             {this.state.postDetails.map((post) => (
               <GridListTile key={"post" + post.id} style={gridListTileStyle}>
                 <Card
@@ -232,25 +220,22 @@ class Home extends Component {
                     <br />
                     <br />
                     <Divider style={{ backgroundColor: "#c0c0c0" }} />
-                    {
-                      this.state.postDescription.map((item, index) => {
-                     return <Typography key={index}>{item.caption}</Typography>
-                    })}
+                    <Typography variant="h5" style={postStyle.captionStyle}>
+                     {this.getEachCaptionsFromPost(post.id)}
+                    </Typography>
                     <div>
-                      <Typography
-                        display="inline"
-                        variant="caption"
-                        style={postStyle.hashtagStyle}
-                      >
-                        #upgrad #skills #onlineplatform
-                      </Typography>
-                    </div>
-                    <div className="like-section">
+                    <Typography
+                      display="inline"
+                      variant="caption"
+                      style={postStyle.hashtagStyle}
+                    >
+                      #upgrad #skills #onlineplatform
+                    </Typography>
+                  </div>
                     <div className="like-section">
                     <FavoriteBorderIcon style={postStyle.likeIconStyle} />
                     <span className="like-post"> 2 likes</span>
                   </div>
-                    </div>
                     <div className="comment-section">
                       <FormControl style={commentStyle.formControlStyle}>
                         <InputLabel htmlFor="addComment">
