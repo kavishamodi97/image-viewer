@@ -29,7 +29,16 @@
     flex-direction: row;
     justify-content: left;
 }
-
 .edit-button{
  margin-left:20px;
 }
+.dispNone{
+    display: none;
+ }
+  .dispBlock{
+    display: block;
+ }
+.red{
+    color: red;
+ }
+
