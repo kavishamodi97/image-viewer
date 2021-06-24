@@ -12,6 +12,8 @@ import InputLabel from "@material-ui/core/InputLabel";
 import Input from "@material-ui/core/Input";
 import Button from "@material-ui/core/Button";
 import FormHelperText from "@material-ui/core/FormHelperText";
+// import GridList from '@material-ui/core/GridList';
+// import GridListTile from '@material-ui/core/GridListTile';
 import { withStyles } from "@material-ui/core/styles";
 
 const styles = (theme) => ({
@@ -35,6 +37,11 @@ const styles = (theme) => ({
     boxShadow: theme.shadows[5],
     padding: theme.spacing(2, 4, 3),
   },
+  gridListPost: {
+    flexWrap: 'nowrap',
+    transform: 'translateZ(0)',
+    width: '100%'
+  },
 });
 
 const profileStyle = {
@@ -57,6 +64,10 @@ const profileStyle = {
     fontWeight: "bold",
     paddingTop: "15px"
   },
+  gridListTileStyle: {
+    width: "350px",
+    margin: "20px",
+  }
 }
 
 class Profile extends Component {
@@ -70,8 +81,12 @@ class Profile extends Component {
       modalOpen: false,
       fullname: "",
       fullnameRequired: "dispNone",
+      postDescription: [], //1st endpoint info
+      postDetails: [], //2nd endpoint info
+      likeCount: Math.floor(Math.random() * 50),
     }
   }
+
   openModelHandler = () => {
     this.setState({ modalOpen: true })
   }
@@ -84,9 +99,71 @@ class Profile extends Component {
     this.setState({ fullname: event.target.value })
   }
 
-  updateClickHandler = () => {
+  updateClickHandler = (event) => {
     this.state.fullname === "" ? this.setState({ fullnameRequired: "dispBlock" }) : this.setState({ fullnameRequired: "dispNone" });
-    if (this.state.fullname === "") return;
+  }
+
+  //Fetching Post Details From Instagram API Using AJAX Calls
+  UNSAFE_componentWillMount() {
+    let data = null;
+    let xhr = new XMLHttpRequest();
+    let that = this;
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        that.setState({ postDescription: JSON.parse(this.responseText).data });
+        // get the post details for each post description
+        that.getPostDetails();
+      }
+    });
+    xhr.open(
+      "GET",
+      "https://graph.instagram.com/me/media?fields=id,caption&access_token=" +
+      window.sessionStorage.getItem("access-token")
+    );
+    xhr.send(data);
+  }
+
+  //get post details
+  getPostDetails = () => {
+    this.state.postDescription.map((post) => {
+      return this.getPostDetailsById(post.id, post.caption);
+    });
+  };
+
+  //get unique post Id
+  getPostDetailsById = (id, caption) => {
+    let that = this;
+    let xhr = new XMLHttpRequest();
+    let data = null;
+    console.log("post id here :" + id);
+    console.log("post caption here:" + caption);
+    xhr.addEventListener("readystatechange", function () {
+      if (this.readyState === 4) {
+        that.setState({
+          postDetails: that.state.postDetails.concat(
+            JSON.parse(this.responseText)
+          ),
+        });
+      }
+    });
+    xhr.open(
+      "GET",
+      "https://graph.instagram.com/" +
+      id +
+      "?fields=id,media_type,media_url,username,timestamp&access_token=" +
+      sessionStorage.getItem("access-token")
+    );
+    xhr.send(data);
+  };
+
+  //Get Post Caption When Post Id Match
+  getEachCaptionsFromPost = (id) => {
+    return this.state.postDescription.map((post) => {
+      if (post.id === id) {
+        console.log("get each caption from post" + post.caption);
+        return post.caption;
+      }
+    });
   }
 
   render() {
@@ -125,7 +202,7 @@ class Profile extends Component {
             <div className="edit-section">
               <div>
                 <Typography style={profileStyle.editTextStyle}>
-                  Set full name Here
+                  upgrad
                 </Typography>
               </div>
               <div className="edit-button">
@@ -161,7 +238,7 @@ class Profile extends Component {
                     <Button
                       variant="contained"
                       color="primary"
-                      onClick={this.updateClickHandler}
+                      onClick={(event) => this.updateClickHandler()}
                     >
                       UPDATE
                     </Button>

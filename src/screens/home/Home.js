@@ -90,6 +90,7 @@ class Home extends Component {
     };
   }
 
+  //Fetching Post Details From Instagram API Using AJAX Calls
   UNSAFE_componentWillMount() {
     let data = null;
     let xhr = new XMLHttpRequest();
@@ -162,15 +163,16 @@ class Home extends Component {
     let ss = date.getSeconds();
     dd = dd < 10 ? "0" + dd : dd;
     mm = mm < 10 ? "0" + mm : mm;
+    MM = MM < 10 ? "0" + MM : MM;
     return (dd + "/" + mm + "/" + yyyy + " " + hh + ":" + MM + ":" + ss);
   }
 
   //Get Post Caption When Post Id Match
   getEachCaptionsFromPost = (id) => {
-    this.state.postDescription.map((post) => {
+    return this.state.postDescription.map((post) => {
       if (post.id === id) {
         console.log("get each caption from post" + post.caption);
-        return post.caption.split("\n")[0];
+        return post.caption;
       }
     });
   }
@@ -196,7 +198,7 @@ class Home extends Component {
                 >
                   <CardHeader
                     avatar={
-                      <Avatar aria-label="recipe" src={instaLogo}></Avatar>
+                      <Avatar style={{ cursor: "pointer" }} aria-label="recipe" src={instaLogo}></Avatar>
                     }
                     title={post.username}
                     subheader={this.convertTimeStampIntoDateFormat(post.timestamp)}
@@ -224,7 +226,7 @@ class Home extends Component {
                     </div>
                     <div className="like-section">
                       <FavoriteBorderIcon style={postStyle.likeIconStyle} />
-                      <span className="like-post"> 2 likes</span>
+                      <span className="like-post"> {this.state.likeCount} likes</span>
                     </div>
                     <div className="comment-section">
                       <FormControl style={commentStyle.formControlStyle}>
