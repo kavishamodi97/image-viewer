@@ -9,6 +9,7 @@
     "caniuse-lite": "^1.0.30001237",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-modal": "^3.14.3",
     "react-router-dom": "^5.2.0",
     "react-scripts": "2.0.4"
   },

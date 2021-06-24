@@ -1,74 +1,59 @@
-.profile-container {
-	display: flex;
-	flex-direction: row;
-	margin-left: 25%;
-	margin-right: 25%;
-}
-
-.avatar-left {
-	float: left;
-	cursor: pointer;
-}
-
-.profile-info {
-	margin-left: 60px;
-	margin-top: 20px;
-}
-
-.info-section {
-	font-size: 16px;
-	margin-top: 10px;
-}
-
-.profile-text {
-	font-weight: bold;
-}
-
-.edit-section {
-	display: flex;
-	flex-direction: row;
-	justify-content: left;
-}
-
-.edit-button {
-	margin-left: 20px;
-}
-
 .dispNone {
-	display: none;
+    display: none;
 }
 
 .dispBlock {
-	display: block;
+    display: block;
 }
 
 .red {
-	color: red;
+    color: red;
 }
-
-.grid-container {
-	display: flex;
-	flex-direction: row;
-	justify-content: left;
+.postImage{
+  cursor: pointer;
+  height: 100%;
+  width: 100%
 }
-
-.post-image {
-	cursor: pointer;
-	height: 100%;
-	width: 100%
+.profile-info{
+     margin-left: 20%;
+    margin-right: 20%;
+    display: flex;
+    flex-direction: row;
 }
-.postModalImageContainer{
-	float: left;
+#avatar{
+    width: 20%;
+}
+#header-details{
+    width: 80%;
+}
+#postInfo{
+    font-size: 14px;
+}
+#editSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+}
+.edit-button{
+    margin-left: 20px;
+}
+.postModalContainer{
+    display: flex;
+    flex-direction: row;
+    justify-content:left;
+    height:100%;
+    width: 80%;
+}
+#postImg{
+    width:60%;
+    height:100%;
 }
 .postModalImage{
-	 object-fit: fill;
+    object-fit: fill;
     width: 100%;
-    height: 100%
+    height: 100%  
 }
-.model-info{
-	display: flex;
-	flex-direction: row;
-}
-.like-section {
-  display: flex;
+#titleBar{
+    display: flex;
+    flex-direction: row;
 }

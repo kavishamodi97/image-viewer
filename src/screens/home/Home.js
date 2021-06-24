@@ -142,8 +142,6 @@ class Home extends Component {
     xhr.send(data);
   };
 
-
-
   //search specific post by caption
   searchTextChangeHandler = (e) => {
     const { postDescription, searchField } = this.state;
