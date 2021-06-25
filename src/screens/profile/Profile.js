@@ -8,6 +8,7 @@ import instaLogo from "../../assets/insta.png";
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
 import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
+import FavoriteIcon from '@material-ui/icons/Favorite';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
@@ -78,6 +79,7 @@ class Profile extends Component {
       postDetails: [], //2nd endpoint info
       postModalOpen: false,
       isAPIDataFetched: false,
+      isLiked: false,
       likeCount: Math.floor(Math.random() * 50),
     }
   }
@@ -169,6 +171,20 @@ class Profile extends Component {
 
   updateClickHandler = (e) => {
     this.state.fullname === "" ? this.setState({ fullnameRequired: "dispBlock" }) : this.setState({ fullnameRequired: "dispNone" });
+  }
+
+  //Like and Dislike Post and Toggle Like Icon
+  likeClickHandler = () => {
+    if (this.state.isLiked) {
+      this.setState({ isLiked: false });
+    } else {
+      this.setState({ isLiked: true });
+    }
+    if (!this.state.isLiked) {
+      this.setState({ likes: this.state.likes + 1 })
+    } else {
+      this.setState({ likes: this.state.likes - 1 })
+    }
   }
 
   render() {
@@ -289,8 +305,9 @@ class Profile extends Component {
                   </div>
                   <br />
                   <div className="like-section">
-                    <FavoriteBorderIcon style={profileStyles.likeIconStyle} />
-                    <span className="like-post"> {this.state.likeCount} likes</span>
+                    {this.state.isLiked && <FavoriteIcon style={{ color: 'red' }} />}
+                    {!this.state.isLiked && <FavoriteBorderIcon style={profileStyles.likeIconStyle} />}
+                    <span className="like-post">  {this.state.likeCount} likes</span>
                   </div>
                   <br />  <br /><br /><br /><br /><br /><br /><br /><br />
                   <div className="comment-section">
