@@ -35,7 +35,7 @@ class Home extends Component {
     };
   }
 
-  componentWillMount() {
+  UNSAFE_componentWillMount() {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;

@@ -44,7 +44,7 @@ const postStyle = {
     hashtagStyle: {
         display: "inline",
         paddingRight: "2px",
-        fontSize: "12px",
+        fontSize: "13px",
         color: "#5bbce4",
     },
     captionStyle: {
@@ -58,7 +58,8 @@ const postStyle = {
 
 const commentStyle = {
     commentButtonStyle: {
-        marginTop: "35px",
+        marginTop: "25px",
+        marginLeft: "10px"
     },
 };
 
@@ -132,7 +133,7 @@ class Post extends Component {
                 <Card style={{ cardStyle }} variant="outlined">
                     <CardHeader
                         avatar={
-                            <Avatar aria-label="recipe" src={instaLogo}></Avatar>
+                            <Avatar aria-label="recipe" style={{ cursor: 'pointer' }} src={instaLogo}></Avatar>
                         }
                         title={detail.username}
                         subheader={this.convertTimeStampIntoDateFormat(detail.timestamp)}
@@ -148,7 +149,7 @@ class Post extends Component {
                         <Typography variant="h5" style={postStyle.captionStyle}>
                             {caption}
                         </Typography>
-                        <Typography display="inline" variant="caption" style={postStyle.hashtagStyle}>#Best #skills #Passion</Typography>
+                        <Typography display="inline" variant="caption" style={postStyle.hashtagStyle}>#Coding #Skills #Passion</Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton aria-label="Add to favorites" onClick={this.likeClickHandler}>

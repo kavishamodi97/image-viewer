@@ -7,8 +7,8 @@ import Avatar from '@material-ui/core/Avatar';
 import instaLogo from "../../assets/insta.png";
 import Divider from '@material-ui/core/Divider';
 import Typography from '@material-ui/core/Typography';
-import FavoriteBorderIcon from "@material-ui/icons/FavoriteBorder";
-import FavoriteIcon from '@material-ui/icons/Favorite';
+import FavoriteIconBorder from '@material-ui/icons/FavoriteBorder';
+import FavoriteIconFill from '@material-ui/icons/Favorite';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Input from '@material-ui/core/Input';
@@ -17,32 +17,56 @@ import Fab from '@material-ui/core/Fab';
 import EditIcon from '@material-ui/icons/Edit';
 import Modal from 'react-modal';
 import FormHelperText from '@material-ui/core/FormHelperText';
+import IconButton from '@material-ui/core/IconButton';
+import { withStyles } from '@material-ui/core/styles';
+
+const styles = theme => ({
+  gridContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  gridList: {
+    width: 250,
+    height: 'auto',
+    overflowY: 'auto'
+  },
+});
+
+const gridListStyle = {
+  marginLeft: "15%", marginRight: "10%", textAlign: "center"
+}
+
+const gridListTileStyle = {
+  height: '300px',
+  width: '300px'
+};
 
 const profileStyles = {
   avatarImageStyle: {
-    width: 90,
-    height: 90,
+    width: 70,
+    height: 70,
     cursor: "pointer"
   },
   profileInfoStyle: {
     fontWeight: "bold",
   },
-  tagStyle: {
+  hashtagStyle: {
     display: 'inline',
     paddingRight: '2px',
     marginRight: '5px',
-    fontSize: '15px',
-    color: '#00FFFF'
+    fontSize: '13px',
+    color: "#5bbce4"
   },
   headingStyle: {
     fontSize: '20px',
   },
-  likeIconStyle: {
-    fontSize: "40px",
+  redLikeIconStyle: {
+    color: "red"
   },
   updateModal: {
     content: {
-      top: '50%',
+      top: '60%',
       left: '50%',
       right: 'auto',
       bottom: 'auto',
@@ -80,10 +104,11 @@ class Profile extends Component {
       postModalOpen: false,
       isAPIDataFetched: false,
       isLiked: false,
-      likeCount: Math.floor(Math.random() * 50),
+      likes: Math.floor(Math.random() * 10) + 1,
+      comments: [],
+      comment: ""
     }
   }
-
 
   //Fetching Post Details From Instagram API Using AJAX Calls
   UNSAFE_componentWillMount() {
@@ -173,7 +198,23 @@ class Profile extends Component {
     this.state.fullname === "" ? this.setState({ fullnameRequired: "dispBlock" }) : this.setState({ fullnameRequired: "dispNone" });
   }
 
-  //Like and Dislike Post and Toggle Like Icon
+  commentChangeHandler = (e) => {
+    this.setState({
+      comment: e.target.value,
+    });
+  }
+
+  //Add Comments To Specific Post
+  commentAddHandler = () => {
+    if (this.state.comment === '') {
+      return
+    }
+    this.setState({
+      comments: this.state.comments.concat(this.state.comment)
+    })
+  }
+
+  // Toggle the like icon And Increase And Descrease Likes
   likeClickHandler = () => {
     if (this.state.isLiked) {
       this.setState({ isLiked: false });
@@ -188,6 +229,7 @@ class Profile extends Component {
   }
 
   render() {
+    const { classes } = this.props;
     if (sessionStorage.getItem("access-token") === null) {
       this.props.history.push("/");
     }
@@ -256,11 +298,11 @@ class Profile extends Component {
           </div>
         </div>
         <br /><br /><br />
-        <div className="image-posts">
-          <GridList cellHeight={160} cols={3} style={{ marginLeft: "15%", marginRight: "10%", textAlign: "center" }}>
-            {this.state.postDetails.map((post, index) => (
-              <GridListTile key={"postImg" + post.id} style={{ height: '300px', width: '300px' }}>
-                <img src={post.media_url} alt={post.username} className="postImage" onClick={() => this.onPostImageClickedHandler(index)} />
+        <div className={classes.gridContainer}>
+          <GridList cellHeight={'auto'} cols={3} style={gridListStyle}>
+            {this.state.postDetails.map((item, index) => (
+              <GridListTile key={item.id} style={gridListTileStyle}>
+                <img src={item.media_url} alt={item.username} className="postImage" onClick={() => this.onPostImageClickedHandler(index)} />
               </GridListTile>
             ))}
           </GridList>
@@ -295,39 +337,37 @@ class Profile extends Component {
                     set caption here
                   </Typography>
                   <div>
-                    <Typography
-                      display="inline"
-                      variant="caption"
-                      style={profileStyles.tagStyle}
-                    >
-                      #upgrad #skills #onlineplatform
-                    </Typography>
+                    <Typography display="inline" variant="caption" style={profileStyles.hashtagStyle}>#Coding #Skills #Passion</Typography>
                   </div>
                   <br />
                   <div className="like-section">
-                    {this.state.isLiked && <FavoriteIcon style={{ color: 'red' }} />}
-                    {!this.state.isLiked && <FavoriteBorderIcon style={profileStyles.likeIconStyle} />}
-                    <span className="like-post">  {this.state.likeCount} likes</span>
+                    <IconButton aria-label="Add to favorites" onClick={this.likeClickHandler}>
+                      {this.state.isLiked && <FavoriteIconFill style={profileStyles.redLikeIconStyle} />}
+                      {!this.state.isLiked && <FavoriteIconBorder />}
+                    </IconButton>
+                    <Typography>
+                      {this.state.likes} likes
+                    </Typography>
                   </div>
                   <br />  <br /><br /><br /><br /><br /><br /><br /><br />
-                  <div className="comment-section">
-                    <FormControl style={commentStyle.formControlStyle}>
-                      <InputLabel htmlFor="addComment">
-                        Add a comment
-                      </InputLabel>
-                      <Input
-                        id="addComment"
-                        type="text"
-                        placeholder="Add a comment"
-                      />
+                  {this.state.comments.map((c, index) => (
+                    <div key={index} className={classes.row}>
+                      <Typography component="p" style={{ fontWeight: 'bold' }}>
+                        set username:
+                      </Typography>
+                      <Typography component="p" style={{ marginLeft: "3px" }}>
+                        {c}
+                      </Typography>
+                    </div>
+                  ))}
+                  <div className={classes.formControl}>
+                    <FormControl style={{ flexGrow: 1 }}>
+                      <InputLabel htmlFor="comment">Add a comment</InputLabel>
+                      <Input id="comment" value={this.state.comment} onChange={this.commentChangeHandler} />
                     </FormControl>
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      style={commentStyle.commentButtonStyle}
-                    >
-                      ADD
-                    </Button>
+                    <FormControl className="commentAdd">
+                      <Button className="addBtn" variant="contained" color="primary" onClick={this.commentAddHandler}>ADD</Button>
+                    </FormControl>
                   </div>
                   <div>
                   </div>
@@ -339,5 +379,4 @@ class Profile extends Component {
     )
   }
 }
-
-export default Profile;
+export default withStyles(styles)(Profile);
