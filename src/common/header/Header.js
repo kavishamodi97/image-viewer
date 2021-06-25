@@ -45,7 +45,6 @@ const Header = (props) => {
                 className="search-field"
                 variant="outlined"
                 placeholder="Search…"
-                onChange={(e) => props.onSearchTextChanged(e)}
                 startAdornment={
                   <InputAdornment
                     variant="standard"

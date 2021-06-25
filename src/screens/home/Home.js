@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
+import './Home.css';
 import Header from '../../common/header/Header';
 import Post from '../home/post/Post';
-import './Home.css';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import GridListTileBar from '@material-ui/core/GridListTileBar';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
@@ -18,8 +17,13 @@ const styles = theme => ({
     width: 1100,
     height: 'auto',
     overflowY: 'auto'
-  }
+  },
 });
+
+const gridListTileStyle = {
+  width: "490px",
+  margin: "10px",
+};
 
 class Home extends Component {
 
@@ -46,21 +50,8 @@ class Home extends Component {
   }
 
   getPostDetails = () => {
-    this.state.postDescription.map(post => {
-      this.getPostDetailsById(post.id)
-    });
-  }
-
-  searchAddHandler = (searchFor) => {
-    console.log("Search string :" + this.state.postDescription)
-    let posts = this.state.postDescription;
-    posts = posts.filter((post) => {
-      let caption = post.caption.toLowerCase();
-      let enteredStr = searchFor.toLowerCase();
-      return caption.includes(enteredStr);
-    })
-    this.setState({
-      postDescription: posts
+    return this.state.postDescription.map(post => {
+      return this.getPostDetailsById(post.id)
     });
   }
 
@@ -88,9 +79,9 @@ class Home extends Component {
           showHomePage="home"
         ></Header>
         <div className={classes.gridContainer}>
-          <GridList className={classes.gridList} cellHeight={'auto'} cols={2}>
+          <GridList cellHeight={'auto'} cols={2} className={classes.gridList}>
             {this.state.postDetails.map((item, index) => (
-              <GridListTile key={item.id}>
+              <GridListTile key={item.id} style={gridListTileStyle}>
                 <Post detail={item} description={this.state.postDescription} />
               </GridListTile>
             ))}

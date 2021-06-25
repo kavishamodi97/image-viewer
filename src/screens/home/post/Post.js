@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './Post.css';
+import instaLogo from "../../../assets/insta.png";
 import Typography from '@material-ui/core/Typography';
 import IconButton from '@material-ui/core/IconButton';
 import FavoriteIconBorder from '@material-ui/icons/FavoriteBorder';
@@ -14,12 +15,14 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Avatar from '@material-ui/core/Avatar';
+import Divider from "@material-ui/core/Divider";
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
     media: {
         height: 0,
-        paddingTop: '60%'
+        paddingTop: '60%',
+        cursor: 'pointer'
     },
     formControl: {
         display: 'flex',
@@ -31,6 +34,33 @@ const styles = theme => ({
         flexDirection: 'row',
     }
 })
+
+const cardStyle = {
+    width: "60%",
+    height: "100%",
+};
+
+const postStyle = {
+    hashtagStyle: {
+        display: "inline",
+        paddingRight: "2px",
+        fontSize: "12px",
+        color: "#5bbce4",
+    },
+    captionStyle: {
+        fontSize: "14px",
+        fontWeight: "bold",
+    },
+    redLikeIconStyle: {
+        color: "red"
+    }
+};
+
+const commentStyle = {
+    commentButtonStyle: {
+        marginTop: "35px",
+    },
+};
 
 class Post extends Component {
     constructor() {
@@ -49,6 +79,7 @@ class Post extends Component {
         });
     }
 
+    //Add Comments To Specific Post
     commentAddHandler = () => {
         if (this.state.comment === '') {
             return
@@ -58,14 +89,13 @@ class Post extends Component {
         })
     }
 
+    // Toggle the like icon And Increase And Descrease Likes
     likeClickHandler = () => {
-        /* toggle the like icon */
         if (this.state.isLiked) {
             this.setState({ isLiked: false });
         } else {
             this.setState({ isLiked: true });
         }
-        /* increase or decrement the link based on toggle */
         if (!this.state.isLiked) {
             this.setState({ likes: this.state.likes + 1 })
         } else {
@@ -73,19 +103,24 @@ class Post extends Component {
         }
     }
 
+    convertTimeStampIntoDateFormat = (newDate) => {
+        let date = new Date(newDate);
+        let dd = date.getDate();
+        let mm = date.getMonth() + 1;
+        let yyyy = date.getFullYear();
+        let hh = date.getHours();
+        let MM = date.getMinutes();
+        let ss = date.getSeconds();
+        dd = dd < 10 ? "0" + dd : dd;
+        mm = mm < 10 ? "0" + mm : mm;
+        return (dd + "/" + mm + "/" + yyyy + " " + hh + ":" + MM + ":" + ss);
+    }
+
     render() {
-        const { classes, detail, description } = this.props
-
-        let timestamp = new Date(detail.timestamp);
-        let year = timestamp.getFullYear();
-        let month = timestamp.getMonth() + 1;
-        let day = timestamp.getDate();
-        let hours = timestamp.getHours();
-        let min = timestamp.getMinutes();
-        let sec = timestamp.getSeconds();
-
-        let time = day + "/" + month + "/" + year + " " + hours + ":" + min + ":" + sec;
+        const { classes, detail, description } = this.props;
         let caption = '';
+
+        //Get Caption For Each Post
         description.forEach(post => {
             if (detail.id === post.id) {
                 caption = post.caption;
@@ -94,27 +129,30 @@ class Post extends Component {
 
         return (
             <div>
-                <Card>
+                <Card style={{ cardStyle }} variant="outlined">
                     <CardHeader
                         avatar={
-                            <Avatar>A</Avatar>
+                            <Avatar aria-label="recipe" src={instaLogo}></Avatar>
                         }
                         title={detail.username}
-                        subheader={time}
+                        subheader={this.convertTimeStampIntoDateFormat(detail.timestamp)}
                     />
                     <CardMedia
                         className={classes.media}
                         image={detail.media_url}
-                        title=""
+                        alt={detail.username}
                     />
+                    <br />
+                    <Divider style={{ backgroundColor: "#c0c0c0" }} />
                     <CardContent>
-                        <Typography variant="body2" color="textSecondary" component="p">
+                        <Typography variant="h5" style={postStyle.captionStyle}>
                             {caption}
                         </Typography>
+                        <Typography display="inline" variant="caption" style={postStyle.hashtagStyle}>#Best #skills #Passion</Typography>
                     </CardContent>
                     <CardActions disableSpacing>
                         <IconButton aria-label="Add to favorites" onClick={this.likeClickHandler}>
-                            {this.state.isLiked && <FavoriteIconFill style={{ color: 'red' }} />}
+                            {this.state.isLiked && <FavoriteIconFill style={postStyle.redLikeIconStyle} />}
                             {!this.state.isLiked && <FavoriteIconBorder />}
                         </IconButton>
                         <Typography>
@@ -125,9 +163,9 @@ class Post extends Component {
                         {this.state.comments.map((c, index) => (
                             <div key={index} className={classes.row}>
                                 <Typography component="p" style={{ fontWeight: 'bold' }}>
-                                    {window.sessionStorage.getItem('username')}:
+                                    {detail.username}:
                                 </Typography>
-                                <Typography component="p" >
+                                <Typography component="p" style={{ marginLeft: "3px" }}>
                                     {c}
                                 </Typography>
                             </div>
@@ -138,10 +176,7 @@ class Post extends Component {
                                 <Input id="comment" value={this.state.comment} onChange={this.commentChangeHandler} />
                             </FormControl>
                             <FormControl className="commentAdd">
-                                <Button onClick={this.commentAddHandler}
-                                    variant="contained" color="primary">
-                                    ADD
-                                </Button>
+                                <Button className="addBtn" variant="contained" color="primary" style={commentStyle.commentButtonStyle} onClick={this.commentAddHandler}>ADD</Button>
                             </FormControl>
                         </div>
                     </CardContent>
