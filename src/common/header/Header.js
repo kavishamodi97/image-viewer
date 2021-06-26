@@ -32,6 +32,7 @@ const Header = (props) => {
     props.history.push("/");
   };
 
+  //Render UI Inside Header Section When Appropriate Screen Matches e.g:-Home,Profile
   return (
     <div>
       <header>

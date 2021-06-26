@@ -11,7 +11,8 @@ const styles = theme => ({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 90
+    marginTop: 90,
+    marginLeft: '10%'
   },
   gridList: {
     width: 1100,
@@ -35,13 +36,16 @@ class Home extends Component {
     };
   }
 
+  //Fetch Instagram Data Using AJAX Calls
   UNSAFE_componentWillMount() {
     let data = null;
     let xhr = new XMLHttpRequest();
     let that = this;
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({ postDescription: JSON.parse(this.responseText).data });
+        that.setState({
+          postDescription: JSON.parse(this.responseText).data,
+        });
         that.getPostDetails();
       }
     });
@@ -49,12 +53,14 @@ class Home extends Component {
     xhr.send(data)
   }
 
+  //Get List Of Ids From API
   getPostDetails = () => {
     return this.state.postDescription.map(post => {
       return this.getPostDetailsById(post.id)
     });
   }
 
+  //Get Post Details From API
   getPostDetailsById = (id) => {
     let that = this
     let xhr = new XMLHttpRequest();
@@ -64,7 +70,6 @@ class Home extends Component {
       if (this.readyState === 4) {
         that.setState({
           postDetails: that.state.postDetails.concat(JSON.parse(this.responseText)),
-          postDetailsCopy: that.state.postDetails.concat(JSON.parse(this.responseText))
         });
       }
     });
@@ -72,6 +77,7 @@ class Home extends Component {
     xhr.send(data)
   }
 
+  //Filter Post By Post Caption
   searchTextHandler = (searchFor) => {
     console.log("Search string :" + this.state.postDescription)
     let posts = this.state.postDescription;
@@ -92,12 +98,11 @@ class Home extends Component {
     console.log("selected posts " + selectedPosts)
     console.log("postDetails " + this.state.postDetails)
     let postInfo = this.state.postDetails
-    postInfo = postInfo.filter(item => selectedPosts.includes(item.id));
+    postInfo = postInfo.filter(item => selectedPosts.includes(item.id)); //Filter Post
     this.setState({
       postDetails: postInfo
     })
   }
-
 
   render() {
     const { classes } = this.props;

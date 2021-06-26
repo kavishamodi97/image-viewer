@@ -81,7 +81,7 @@ class Post extends Component {
         });
     }
 
-    //Add Comments To Specific Post
+    //Add Comments To Specific Post And Clear Comment Input Field Value 
     commentAddHandler = () => {
         if (this.state.comment === '') {
             return
@@ -92,7 +92,7 @@ class Post extends Component {
         })
     }
 
-    // Toggle the like icon And Increase And Descrease Likes
+    // Toggle the Like Icon And Increase And Descrease Likes
     likeClickHandler = () => {
         if (this.state.isLiked) {
             this.setState({ isLiked: false });
@@ -106,6 +106,7 @@ class Post extends Component {
         }
     }
 
+    //Convert TimeStamp Into Specific Date Format
     convertTimeStampIntoDateFormat = (newDate) => {
         let date = new Date(newDate);
         let dd = date.getDate();
@@ -132,6 +133,7 @@ class Post extends Component {
             }
         });
 
+        //Render Card Component 
         return (
             <div>
                 <Card style={{ cardStyle }} variant="outlined">

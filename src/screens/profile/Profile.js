@@ -27,20 +27,16 @@ const styles = theme => ({
     alignItems: 'center',
   },
   gridList: {
-    width: 250,
+    width: 750,
     height: 'auto',
-    overflowY: 'auto'
+    overflowY: 'auto',
+    textAlign: "center"
+  },
+  gridListTileStyle: {
+    height: '750px',
+    width: '750px',
   },
 });
-
-const gridListStyle = {
-  marginLeft: "15%", marginRight: "10%", textAlign: "center"
-}
-
-const gridListTileStyle = {
-  height: '300px',
-  width: '300px'
-};
 
 const profileStyles = {
   avatarImageStyle: {
@@ -50,6 +46,10 @@ const profileStyles = {
   },
   profileInfoStyle: {
     fontWeight: "bold",
+  },
+  fullnameStyle: {
+    fontWeight: "bold",
+    paddingTop: '6px'
   },
   hashtagStyle: {
     display: 'inline',
@@ -102,6 +102,7 @@ class Profile extends Component {
       postDescription: [], //1st endpoint info
       postDetails: [], //2nd endpoint info
       postModalOpen: false,
+      currentImageIndex: 0,
       isAPIDataFetched: false,
       isLiked: false,
       likes: Math.floor(Math.random() * 10) + 1,
@@ -198,6 +199,11 @@ class Profile extends Component {
     this.state.fullname === "" ? this.setState({ fullnameRequired: "dispBlock" }) : this.setState({ fullnameRequired: "dispNone" });
   }
 
+  postImageClickHandler = (index) => {
+    this.setState({ currentImageIndex: index });
+    this.openPostModelHandler();
+  }
+
   commentChangeHandler = (e) => {
     this.setState({
       comment: e.target.value,
@@ -263,7 +269,7 @@ class Profile extends Component {
             <br />
             <div id="editSection">
               <div>
-                <Typography style={profileStyles.profileInfoStyle}>
+                <Typography style={profileStyles.fullnameStyle}>
                   update name
                 </Typography>
               </div>
@@ -299,10 +305,10 @@ class Profile extends Component {
         </div>
         <br /><br /><br />
         <div className={classes.gridContainer}>
-          <GridList cellHeight={'auto'} cols={3} style={gridListStyle}>
+          <GridList cellHeight={'auto'} cols={3} className={classes.gridList}>
             {this.state.postDetails.map((item, index) => (
-              <GridListTile key={item.id} style={gridListTileStyle}>
-                <img src={item.media_url} alt={item.username} className="postImage" onClick={() => this.onPostImageClickedHandler(index)} />
+              <GridListTile key={item.id} className={classes.gridListTileStyle}>
+                <img src={item.media_url} alt={item.caption} className="postImage" onClick={() => this.postImageClickHandler(index)} />
               </GridListTile>
             ))}
           </GridList>
