@@ -31,7 +31,7 @@ class Home extends Component {
     super(props);
     this.state = {
       postDescription: [], //1st Endpoint 
-      postDetails: []  //2nd Endpoint
+      postDetails: [], //2nd Endpoint
     };
   }
 
@@ -62,12 +62,42 @@ class Home extends Component {
     console.log("post id here :" + id)
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
-        that.setState({ postDetails: that.state.postDetails.concat(JSON.parse(this.responseText)) });
+        that.setState({
+          postDetails: that.state.postDetails.concat(JSON.parse(this.responseText)),
+          postDetailsCopy: that.state.postDetails.concat(JSON.parse(this.responseText))
+        });
       }
     });
     xhr.open("GET", "https://graph.instagram.com/" + id + "?fields=id,media_type,media_url,username,timestamp&access_token=" + sessionStorage.getItem('access-token'))
     xhr.send(data)
   }
+
+  searchTextHandler = (searchFor) => {
+    console.log("Search string :" + this.state.postDescription)
+    let posts = this.state.postDescription;
+    let selectedPosts = []
+    posts = posts.filter((post) => {
+      let caption = post.caption.toLowerCase();
+      let enteredStr = searchFor.toLowerCase();
+      if (caption.includes(enteredStr)) {
+        selectedPosts.push(post.id)
+        return true;
+      } else {
+        return false;
+      }
+    })
+    this.setState({
+      postDescription: posts
+    })
+    console.log("selected posts " + selectedPosts)
+    console.log("postDetails " + this.state.postDetails)
+    let postInfo = this.state.postDetails
+    postInfo = postInfo.filter(item => selectedPosts.includes(item.id));
+    this.setState({
+      postDetails: postInfo
+    })
+  }
+
 
   render() {
     const { classes } = this.props;
@@ -77,6 +107,7 @@ class Home extends Component {
           history={this.props.history}
           title="Image Viewer"
           showHomePage="home"
+          searchHandler={this.searchTextHandler}
         ></Header>
         <div className={classes.gridContainer}>
           <GridList cellHeight={'auto'} cols={2} className={classes.gridList}>

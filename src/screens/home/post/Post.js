@@ -74,6 +74,7 @@ class Post extends Component {
         }
     }
 
+    //Get Input Value From Comment Input Field
     commentChangeHandler = (e) => {
         this.setState({
             comment: e.target.value,
@@ -86,7 +87,8 @@ class Post extends Component {
             return
         }
         this.setState({
-            comments: this.state.comments.concat(this.state.comment)
+            comments: this.state.comments.concat(this.state.comment),
+            comment: ''
         })
     }
 
@@ -114,6 +116,8 @@ class Post extends Component {
         let ss = date.getSeconds();
         dd = dd < 10 ? "0" + dd : dd;
         mm = mm < 10 ? "0" + mm : mm;
+        MM = MM < 10 ? "0" + MM : MM;
+        ss = ss < 10 ? "0" + ss : ss;
         return (dd + "/" + mm + "/" + yyyy + " " + hh + ":" + MM + ":" + ss);
     }
 
