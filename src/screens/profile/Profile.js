@@ -36,7 +36,32 @@ const styles = theme => ({
     height: '750px',
     width: '750px',
   },
+  formControl: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    margin: theme.spacing(),
+    width: 900,
+  },
 });
+
+const postModalstyles = {
+  postsStyle: {
+    height: '300px',
+    paddingTop: '30%',
+  },
+  hashtagStyle: {
+    color: '#2fc3e0'
+  },
+  editModal: {
+    position: 'relative',
+    width: "180px",
+    backgroundColor: "white",
+    top: "28%",
+    padding: "2%",
+    margin: "0 auto"
+  }
+};
 
 const profileStyles = {
   avatarImageStyle: {
@@ -77,17 +102,12 @@ const profileStyles = {
 }
 
 const commentStyle = {
-  formControlStyle: {
-    width: "90%",
-    marginRight: "10px",
-    height: "40px",
-    marginTop: "60px",
-  },
   commentButtonStyle: {
-    height: "50px",
-    marginTop: "60px",
+    marginTop: "25px",
+    marginLeft: "10px"
   },
 };
+
 
 class Profile extends Component {
   constructor() {
@@ -99,6 +119,7 @@ class Profile extends Component {
       editModalOpen: false,
       fullname: "",
       fullnameRequired: "dispNone",
+      updatedFullName: '',
       postDescription: [], //1st endpoint info
       postDetails: [], //2nd endpoint info
       postModalOpen: false,
@@ -192,11 +213,24 @@ class Profile extends Component {
   }
 
   inputFullnameChangeHandler = (e) => {
-    this.setState({ fullname: e.target.value });
+    this.setState({
+      updatedFullName: e.target.value
+    })
   }
 
   updateClickHandler = (e) => {
-    this.state.fullname === "" ? this.setState({ fullnameRequired: "dispBlock" }) : this.setState({ fullnameRequired: "dispNone" });
+    if (this.state.updatedFullName === '') {
+      this.setState({ fullNameRequired: 'dispBlock' })
+    } else {
+      this.setState({ fullNameRequired: 'dispNone' })
+    }
+
+    if (this.state.updatedFullName === "") { return }
+
+    this.setState({
+      fullName: this.state.updatedFullName
+    })
+    this.closeModalHandler();
   }
 
   postImageClickHandler = (index) => {
@@ -216,7 +250,8 @@ class Profile extends Component {
       return
     }
     this.setState({
-      comments: this.state.comments.concat(this.state.comment)
+      comments: this.state.comments.concat(this.state.comment),
+      comment: ''
     })
   }
 
@@ -270,7 +305,7 @@ class Profile extends Component {
             <div id="editSection">
               <div>
                 <Typography style={profileStyles.fullnameStyle}>
-                  update name
+                  {this.state.fullName}
                 </Typography>
               </div>
               <div>&nbsp;&nbsp;&nbsp;</div>
@@ -314,73 +349,62 @@ class Profile extends Component {
           </GridList>
         </div>
         {this.state.isAPIDataFetched &&
-          <div className="image-modal">
-            <Modal
-              ariaHideApp={false}
-              isOpen={this.state.postModalOpen}
-              contentLabel="Post-Modal"
-              onRequestClose={this.closePostModalHandler}
-            >
-              <div className="postModalContainer">
-                <div id="postImg">
-                  <img src={instaLogo} alt="post-modal-image" className="postModalImage" />
-                </div>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <div className="modalDetailPane">
-                  <div id="titleBar">
-                    <div id="modalAvatar">
-                      <Avatar aria-label="recipe" src={instaLogo}>
-                      </Avatar>
-                    </div>
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                    <div id="modalUserName">
-                      username
-                    </div>
-                  </div>
-                  <Divider style={{ backgroundColor: "#c0c0c0" }} />
-                  <br />
-                  <Typography variant="h5" style={profileStyles.headingStyle} >
-                    set caption here
+          <Modal
+            aria-labelledby="image-modal"
+            aria-describedby="modal to show image details"
+            isOpen={this.state.postModalOpen}
+            onRequestClose={this.closePostModalHandler}
+            style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+            <div style={{ display: 'flex', flexDirection: 'row', backgroundColor: "#fff", width: '70%', height: '70%' }}>
+              <div style={{ width: '50%', padding: 10 }}>
+                <img style={{ height: '100%', width: '100%' }}
+                  src={instaLogo}
+                  alt="modal1" />
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', width: '50%', padding: 10 }}>
+                <div style={{ borderBottom: '2px solid #f2f2f2', display: 'flex', flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                  <Avatar
+                    alt="User Image"
+                    src={instaLogo}
+                    style={{ width: "50px", height: "50px", margin: '10px' }} />
+                  <Typography component="p">
+                    kavisha
                   </Typography>
-                  <div>
-                    <Typography display="inline" variant="caption" style={profileStyles.hashtagStyle}>#Coding #Skills #Passion</Typography>
-                  </div>
-                  <br />
-                  <div className="like-section">
-                    <IconButton aria-label="Add to favorites" onClick={this.likeClickHandler}>
-                      {this.state.isLiked && <FavoriteIconFill style={profileStyles.redLikeIconStyle} />}
-                      {!this.state.isLiked && <FavoriteIconBorder />}
-                    </IconButton>
-                    <Typography>
-                      {this.state.likes} likes
+                </div>
+                <div style={{ display: 'flex', height: '100%', flexDirection: 'column', justifyContent: 'space-between' }}>
+                  <div style={{ marginLeft: '5px' }}>
+                    <Typography component="p" style={{ paddingTop: "6px" }}>
+                      hi my caption
+                    </Typography>
+                    <Typography style={postModalstyles.hashtagStyle} component="p" >
+                      #coding #skills #passion
                     </Typography>
                   </div>
-                  <br />  <br /><br /><br /><br /><br /><br /><br /><br />
-                  {this.state.comments.map((c, index) => (
-                    <div key={index} className={classes.row}>
-                      <Typography component="p" style={{ fontWeight: 'bold' }}>
-                        set username:
-                      </Typography>
-                      <Typography component="p" style={{ marginLeft: "3px" }}>
-                        {c}
-                      </Typography>
-                    </div>
-                  ))}
-                  <div className={classes.formControl}>
-                    <FormControl style={{ flexGrow: 1 }}>
-                      <InputLabel htmlFor="comment">Add a comment</InputLabel>
-                      <Input id="comment" value={this.state.comment} onChange={this.commentChangeHandler} />
-                    </FormControl>
-                    <FormControl className="commentAdd">
-                      <Button className="addBtn" variant="contained" color="primary" onClick={this.commentAddHandler}>ADD</Button>
-                    </FormControl>
-                  </div>
                   <div>
+                    <br />  <br />   <br /><br /> <br /> <br /> <br /> <br />
+                    <div className="right-botton row">
+                      <IconButton aria-label="Add to favorites" onClick={this.likeClickHandler}>
+                        {this.state.isLiked && <FavoriteIconFill style={profileStyles.redLikeIconStyle} />}
+                        {!this.state.isLiked && <FavoriteIconBorder />}
+                      </IconButton>
+                      <span>
+                        {this.state.likes} likes
+                      </span>
+                    </div>
+                    <div className={classes.formControl}>
+                      <FormControl style={{ flexGrow: 1 }}>
+                        <InputLabel style={{ width: '100%' }} htmlFor="comment">Add a comment</InputLabel>
+                        <Input id="comment" value={this.state.comment} onChange={this.commentChangeHandler} />
+                      </FormControl>
+                      <FormControl className="commentAdd">
+                        <Button className="addBtn" variant="contained" color="primary" style={commentStyle.commentButtonStyle} onClick={this.commentAddHandler}>ADD</Button>
+                      </FormControl>
+                    </div>
                   </div>
                 </div>
               </div>
-            </Modal>
-          </div>}
+            </div>
+          </Modal>}
       </div>
     )
   }
