@@ -22,7 +22,6 @@ const styles = theme => ({
     media: {
         height: 0,
         paddingTop: '60%',
-        cursor: 'pointer'
     },
     formControl: {
         display: 'flex',

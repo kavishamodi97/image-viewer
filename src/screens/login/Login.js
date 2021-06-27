@@ -49,7 +49,7 @@ class Login extends Component {
   loginClickHandler = () => {
     let tempUsername = "test";
     let tempPassword = "test@123";
-    let accessToken = "IGQVJWdV90bVB0ZADZAteF9hQ0ZAqM3dic25XUVJlOWN6cDNMcnhhUjc1c25fZAWM1dTVpRGhpTDEwVThWT1l1NURRUnJrS2hGaW9vMGp3OC1RdVY2UEZATSlBrZA1ZAuY3RNXzJzNnJwU2JVdXVFeVJ0dFFFaFB4ZAVZASdThhd3Jv";
+    let accessToken = "IGQVJXY3locE53Y2dzZAFFvX3pZARm5BY0tVX3dtX1NvUXhNeFNQbFFURkdhT2VTYVg3OHlLOXpadUhpZA2IwRDh5NVczbkpzR0JZAdWhRNlFNQkxwVlRieEg0ci13MXA3TzgxekxoZA0xnbEFqVGVLekp0alFCbmFpRlZABVC1V";
 
     /* Initial Set usernamePasswordIncorrect state as display none */
     this.setState({ usernamePasswordIncorrect: "dispNone" });
