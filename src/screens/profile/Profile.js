@@ -215,6 +215,9 @@ class Profile extends Component {
   render() {
     const { classes } = this.props;
     let likeCount = this.state.likes;
+    if (sessionStorage.getItem("access-token") === null) {
+      this.props.history.push("/");
+    }
     return (
       <div>
         <Header
@@ -284,7 +287,7 @@ class Profile extends Component {
             className={classes.openedImageObjModal}>
             <div className={classes.openedImageObjContainer}>
               <div className={classes.openedImageObjContainerRow1}>
-                <img style={{ height: '100%', width: '100%' }}
+                <img style={{ cursor: 'pointer', height: '100%', width: '100%' }}
                   src={this.state.postMediaObj.media_url}
                   alt={this.state.openedPostObj.caption} />
               </div>
@@ -293,7 +296,7 @@ class Profile extends Component {
                   <Avatar
                     alt="User Image"
                     src={instaLogo}
-                    style={{ width: "50px", height: "50px", margin: '10px' }} />
+                    style={{ cursor: 'pointer', width: "50px", height: "50px", margin: '10px' }} />
                   <Typography component="p" style={{ fontWeight: 'bold' }}>
                     {this.state.user}
                   </Typography>

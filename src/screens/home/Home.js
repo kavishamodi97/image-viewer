@@ -114,6 +114,9 @@ class Home extends Component {
   //Render Dynamic Data In Post Component
   render() {
     const { classes } = this.props;
+    if (sessionStorage.getItem("access-token") === null) {
+      this.props.history.push("/");
+    }
     return (
       <div>
         <Header
