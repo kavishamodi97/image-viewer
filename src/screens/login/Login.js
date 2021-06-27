@@ -72,7 +72,7 @@ class Login extends Component {
         "access-token",
         accessToken
       ); /* save access-token in session storage */
-      this.props.history.push("/home"); /* redirect To Home Page */
+      this.props.history.replace("/home"); /* redirect To Home Page */
     } else {
       if (this.state.username !== "" && this.state.loginPassword !== "") {
         this.setState({ usernamePasswordIncorrect: "dispBlock" });

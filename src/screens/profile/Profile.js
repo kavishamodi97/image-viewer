@@ -235,7 +235,7 @@ class Profile extends Component {
               <div className={classes.profileHeadInfo}> Followed By: {this.state.followedBy} </div> <br />
             </div><br />
             <div style={{ fontSize: '16px', fontWeight: 'bold' }}> {this.state.fullname}
-              <Fab mini variant="round" color="secondary" aria-label="Edit" style={{ marginLeft: "20px" }} onClick={this.openEditModalHandler}>
+              <Fab variant="round" color="secondary" aria-label="Edit" style={{ marginLeft: "20px" }} onClick={this.openEditModalHandler}>
                 <EditIcon />
               </Fab>
             </div>
