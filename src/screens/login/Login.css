@@ -1,33 +1,32 @@
 /* Set Css Styles for Login Section:- */
 
-.card-container{
-  text-align: center;
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
+.card-container {
+	text-align: center;
+	margin-top: 20px;
+	display: flex;
+	justify-content: center;
+	flex-direction: column;
 }
 
-.login-card{
-  width: 350px;
-  padding: 32px 64px 32px 64px;
-  margin: auto;
-  text-align: left;
+.login-card {
+	width: 350px;
+	padding: 32px 64px 32px 64px;
+	margin: auto;
+	text-align: left;
 }
 
-.input-field{
-  width: 350px;
+.input-field {
+	width: 350px;
 }
 
-.dispNone{
-    display: none;
- }
- 
- .dispBlock{
-    display: block;
- }
+.dispNone {
+	display: none;
+}
 
-.red{
-    color: red;
- }
+.dispBlock {
+	display: block;
+}
 
+.red {
+	color: red;
+}

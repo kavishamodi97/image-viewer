@@ -133,7 +133,7 @@ class Post extends Component {
             }
         });
 
-        //Render Card Component 
+        //Render Post Details Into Card Component 
         return (
             <div>
                 <Card style={{ cardStyle }} variant="outlined">

@@ -87,7 +87,7 @@ class Profile extends Component {
   //Get List Of Ids From API
   getPostDetails = () => {
     this.state.postDescription.map(post => {
-      this.getPostDetailsById(post.id)
+      return this.getPostDetailsById(post.id)
     });
   }
 

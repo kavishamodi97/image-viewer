@@ -1,27 +1,31 @@
+/* Set Css Styles for Profile Section:- */
+
 .top-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 100px;
+	display: flex;
+	justify-content: center;
+	margin-top: 100px;
 }
 
 .profile-picture-avatar {
-    width: "90px";
-    height: "90px";
+	width: "90px";
+	height: "90px";
 }
+
 .dispNone {
-    display: none;
+	display: none;
 }
 
 .dispBlock {
-    display: block;
+	display: block;
 }
+
 .red {
-    color: red;
+	color: red;
 }
 
 .row {
-    display:flex;
-    flex-direction:row;
-    justify-content:flex-start;
-    align-items:center
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	align-items: center
 }

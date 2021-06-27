@@ -11,22 +11,27 @@ import MenuItem from "@material-ui/core/MenuItem";
 const Header = (props) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
 
+  //Click On Profile Picture 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
+  //Close Menu Item
   const handleClose = () => {
     setAnchorEl(null);
   };
 
+  //Click On Profile Picture 
   const onClickLogoHandler = () => {
     sessionStorage.getItem("access-token") !== null ? props.history.push("/home") : props.history.push("/");
   }
 
+  //Redirect TO Profile Page
   const profileClickHandler = () => {
     props.history.push("/profile");
   };
 
+  //Remove Access Token From Session Storage And Redirect To Login Page Again
   const logoutClickHandler = () => {
     sessionStorage.removeItem("access-token");
     props.history.push("/");

@@ -33,8 +33,8 @@ class Home extends Component {
     this.state = {
       postDescription: [], //1st Endpoint 
       postDetails: [], //2nd Endpoint
-      postDescriptionCopy: [],
-      postDetailsCopy: []
+      postDescriptionCopy: [], //Maintain 1st Endpoint State For Search Post By Caption
+      postDetailsCopy: [] //Maintain 2nd Endpoint State For Post Filter
     };
   }
 
@@ -87,6 +87,7 @@ class Home extends Component {
   searchTextHandler = (searchString) => {
     let posts = this.state.postDescriptionCopy;
     let filteredPost = []
+    //Filter Post By Caption
     posts = posts.filter((post) => {
       let caption = post.caption.toLowerCase();
       let enteredStr = searchString.toLowerCase();
@@ -103,11 +104,14 @@ class Home extends Component {
     console.log("selected posts " + filteredPost)
     console.log("postDetails " + this.state.postDetails)
     let postInfo = this.state.postDetailsCopy
+    //Filter Post Details
     postInfo = postInfo.filter(item => filteredPost.includes(item.id));
     this.setState({
       postDetails: postInfo
     })
   }
+
+  //Render Dynamic Data In Post Component
   render() {
     const { classes } = this.props;
     return (
