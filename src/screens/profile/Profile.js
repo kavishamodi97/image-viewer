@@ -108,10 +108,15 @@ class Profile extends Component {
     xhr.send(data)
   }
 
+  //Open Edit Modal On Edit Icon
   openEditModalHandler = () => {
-    this.setState({ editModalIsOpen: true });
+    this.setState({
+      editModalIsOpen: true,
+      newFullName: ""
+    });
   }
 
+  //Close Edit Modal
   closeEditModalHandler = () => {
     this.setState({
       editModalIsOpen: false,
@@ -120,12 +125,14 @@ class Profile extends Component {
   }
 
   fullNameChangeHandler = (e) => {
+    console.log("Fullname change handler :" + e.target.value)
     this.setState({
       newFullName: e.target.value
     })
   }
 
   updateFullNameHandler = () => {
+    console.log("new full name : " + this.state.newFullName)
     if (this.state.newFullName === '') {
       this.setState({ fullNameRequired: 'dispBlock' })
     } else {
@@ -141,6 +148,7 @@ class Profile extends Component {
     this.closeEditModalHandler()
   }
 
+  // Get Post Information Inside Post Modal
   openPostImageModalHandler = (event) => {
     var descResult = this.state.postDescription.find(item => {
       return item.id === event.target.id
@@ -151,10 +159,12 @@ class Profile extends Component {
     this.setState({ imageModalIsOpen: true, openedPostObj: descResult, postMediaObj: mediaDetails });
   }
 
+  //Close Post Modal
   closeImageModalHandler = () => {
     this.setState({ imageModalIsOpen: false });
   }
 
+  // Increment ANd Decrement Post Like Inside Post Modal
   likeClickHandler = (id) => {
     if (!this.state.isLiked) {
       this.setState({
@@ -176,6 +186,7 @@ class Profile extends Component {
     }
   }
 
+  //Add Comments To Specific Post
   addCommentHandler = (id) => {
     console.log('id', id);
     if (this.state.postComment === "" || typeof this.state.postComment === undefined) {
@@ -193,6 +204,7 @@ class Profile extends Component {
       postComment: ''
     })
   }
+
 
   commentChangeHandler = (e) => {
     this.setState({
@@ -276,7 +288,6 @@ class Profile extends Component {
                   src={this.state.postMediaObj.media_url}
                   alt={this.state.openedPostObj.caption} />
               </div>
-
               <div className={classes.openedImageObjContainerRow2}>
                 <div className={classes.openedImageObjContainerRow21}>
                   <Avatar

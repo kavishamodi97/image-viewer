@@ -33,6 +33,8 @@ class Home extends Component {
     this.state = {
       postDescription: [], //1st Endpoint 
       postDetails: [], //2nd Endpoint
+      postDescriptionCopy: [],
+      postDetailsCopy: []
     };
   }
 
@@ -43,8 +45,10 @@ class Home extends Component {
     let that = this;
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
+        let apiResponseData = JSON.parse(this.responseText).data;
         that.setState({
-          postDescription: JSON.parse(this.responseText).data,
+          postDescription: apiResponseData,
+          postDescriptionCopy: apiResponseData
         });
         that.getPostDetails();
       }
@@ -68,8 +72,10 @@ class Home extends Component {
     console.log("post id here :" + id)
     xhr.addEventListener('readystatechange', function () {
       if (this.readyState === 4) {
+        let apiResponseData = JSON.parse(this.responseText);
         that.setState({
-          postDetails: that.state.postDetails.concat(JSON.parse(this.responseText)),
+          postDetails: that.state.postDetails.concat(apiResponseData),
+          postDetailsCopy: that.state.postDetailsCopy.concat(apiResponseData)
         });
       }
     });
@@ -78,15 +84,14 @@ class Home extends Component {
   }
 
   //Filter Post By Post Caption
-  searchTextHandler = (searchFor) => {
-    console.log("Search string :" + this.state.postDescription)
-    let posts = this.state.postDescription;
-    let selectedPosts = []
+  searchTextHandler = (searchString) => {
+    let posts = this.state.postDescriptionCopy;
+    let filteredPost = []
     posts = posts.filter((post) => {
       let caption = post.caption.toLowerCase();
-      let enteredStr = searchFor.toLowerCase();
+      let enteredStr = searchString.toLowerCase();
       if (caption.includes(enteredStr)) {
-        selectedPosts.push(post.id)
+        filteredPost.push(post.id)
         return true;
       } else {
         return false;
@@ -95,15 +100,14 @@ class Home extends Component {
     this.setState({
       postDescription: posts
     })
-    console.log("selected posts " + selectedPosts)
+    console.log("selected posts " + filteredPost)
     console.log("postDetails " + this.state.postDetails)
-    let postInfo = this.state.postDetails
-    postInfo = postInfo.filter(item => selectedPosts.includes(item.id)); //Filter Post
+    let postInfo = this.state.postDetailsCopy
+    postInfo = postInfo.filter(item => filteredPost.includes(item.id));
     this.setState({
       postDetails: postInfo
     })
   }
-
   render() {
     const { classes } = this.props;
     return (
